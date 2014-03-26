@@ -101,6 +101,7 @@ public abstract class RuntimeDelegate
          }
       }
       log.warning("Returning instance: " + result.getClass().getName());
+      log.warning("Returning instance: " + result.toString());
       return result;
    }
 
@@ -133,6 +134,7 @@ public abstract class RuntimeDelegate
          }
          log.throwing(RuntimeDelegate.class.getName(), "findDelegate", new Exception("Stack trace"));
          log.warning("Found instance: " + delegate.getClass().getName());
+         log.warning("Found instance: " + delegate.toString());
          return (RuntimeDelegate) delegate;
       }
       catch (Exception ex)
@@ -154,6 +156,7 @@ public abstract class RuntimeDelegate
    {
       log.throwing(RuntimeDelegate.class.getName(), "setInstance", new Exception("Stack trace"));
       log.warning("Setting instance: " + rd.getClass().getName());
+      log.warning("Setting instance: " + rd.toString());
       SecurityManager security = System.getSecurityManager();
       if (security != null)
       {
