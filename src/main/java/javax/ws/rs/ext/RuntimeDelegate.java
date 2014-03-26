@@ -25,6 +25,8 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.Variant.VariantListBuilder;
 import java.lang.reflect.ReflectPermission;
 import java.net.URL;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Implementations of JAX-RS provide a concrete subclass of RuntimeDelegate and
@@ -47,7 +49,7 @@ public abstract class RuntimeDelegate
    {
    }
 
-   private static volatile RuntimeDelegate rd;
+   private static volatile Map<ClassLoader, RuntimeDelegate> rd = new ConcurrentHashMap<ClassLoader, RuntimeDelegate>();
 
    /**
     * Obtain a RuntimeDelegate instance. If an instance had not already been
@@ -84,16 +86,17 @@ public abstract class RuntimeDelegate
     */
    public static RuntimeDelegate getInstance()
    {
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
       // Double-check idiom for lazy initialization of fields.
-      RuntimeDelegate result = rd;
+      RuntimeDelegate result = rd.get(cl);
       if (result == null)
       { // First check (no locking)
          synchronized (RuntimeDelegate.class)
          {
-            result = rd;
+            result = rd.get(cl);
             if (result == null)
             { // Second check (with locking)
-               rd = result = findDelegate();
+               rd.put(cl, result = findDelegate());
             }
          }
       }
@@ -151,9 +154,10 @@ public abstract class RuntimeDelegate
       {
          security.checkPermission(rp);
       }
+      ClassLoader cl = Thread.currentThread().getContextClassLoader();
       synchronized (RuntimeDelegate.class)
       {
-         RuntimeDelegate.rd = rd;
+         RuntimeDelegate.rd.put(cl, rd);
       }
    }
 
