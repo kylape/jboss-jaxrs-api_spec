@@ -26,7 +26,7 @@ import javax.ws.rs.core.Variant.VariantListBuilder;
 import java.lang.reflect.ReflectPermission;
 import java.net.URL;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 
 /**
  * Implementations of JAX-RS provide a concrete subclass of RuntimeDelegate and
@@ -49,7 +49,7 @@ public abstract class RuntimeDelegate
    {
    }
 
-   private static volatile Map<ClassLoader, RuntimeDelegate> rd = new ConcurrentHashMap<ClassLoader, RuntimeDelegate>();
+   private static volatile Map<ClassLoader, RuntimeDelegate> rd = new WeakHashMap<ClassLoader, RuntimeDelegate>();
 
    /**
     * Obtain a RuntimeDelegate instance. If an instance had not already been
