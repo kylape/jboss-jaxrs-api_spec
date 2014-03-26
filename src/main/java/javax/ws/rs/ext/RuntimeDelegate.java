@@ -25,6 +25,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.Variant.VariantListBuilder;
 import java.lang.reflect.ReflectPermission;
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * Implementations of JAX-RS provide a concrete subclass of RuntimeDelegate and
@@ -35,6 +36,8 @@ import java.net.URL;
  */
 public abstract class RuntimeDelegate
 {
+
+   private static Logger log = Logger.getLogger(RuntimeDelegate.class.getName());
 
    public static final String JAXRS_RUNTIME_DELEGATE_PROPERTY
            = "javax.ws.rs.ext.RuntimeDelegate";
@@ -97,6 +100,7 @@ public abstract class RuntimeDelegate
             }
          }
       }
+      log.warning("Returning instance: " + result.getClass().getName());
       return result;
    }
 
@@ -127,6 +131,7 @@ public abstract class RuntimeDelegate
                     delegate.getClass().getClassLoader().getResource(classnameAsResource) +
                     "to" + targetTypeURL.toString());
          }
+         log.warning("Found instance: " + delegate.getClass().getName());
          return (RuntimeDelegate) delegate;
       }
       catch (Exception ex)
@@ -146,6 +151,7 @@ public abstract class RuntimeDelegate
     */
    public static void setInstance(RuntimeDelegate rd) throws SecurityException
    {
+      log.warning("Setting instance: " + rd.getClass().getName());
       SecurityManager security = System.getSecurityManager();
       if (security != null)
       {
