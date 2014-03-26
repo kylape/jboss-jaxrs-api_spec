@@ -131,6 +131,7 @@ public abstract class RuntimeDelegate
                     delegate.getClass().getClassLoader().getResource(classnameAsResource) +
                     "to" + targetTypeURL.toString());
          }
+         log.throwing(RuntimeDelegate.class.getName(), "findDelegate", new Exception("Stack trace"));
          log.warning("Found instance: " + delegate.getClass().getName());
          return (RuntimeDelegate) delegate;
       }
@@ -151,6 +152,7 @@ public abstract class RuntimeDelegate
     */
    public static void setInstance(RuntimeDelegate rd) throws SecurityException
    {
+      log.throwing(RuntimeDelegate.class.getName(), "setInstance", new Exception("Stack trace"));
       log.warning("Setting instance: " + rd.getClass().getName());
       SecurityManager security = System.getSecurityManager();
       if (security != null)
